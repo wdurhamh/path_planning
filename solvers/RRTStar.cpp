@@ -18,7 +18,7 @@ RRTStar::RRTStar(float rMax, float epsGoal, float minIters) : rMax(rMax), epsGoa
 }
 
 
-std::vector<Point> RRTStar::solve(ProblemInstance pInst){
+std::vector<Point> RRTStar::solve(ProblemInstance &pInst){
     //initialize the K-D tree for storage
 
     //to do:

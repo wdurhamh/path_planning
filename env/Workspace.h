@@ -21,6 +21,8 @@ class Workspace{
 
         Workspace(float x_min, float x_max, float y_min, float y_max);
 
+        bool inWorkspace(const Point &p) const;
+
         bool ptInObstacle(const Point &p) const;
 
         bool segmentIntersectsObstacle(const Point &p1, const Point &p2) const;

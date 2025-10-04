@@ -12,7 +12,7 @@ class RRTStar{
     
     RRTStar(float rMax, float epsGoal, float minIters);
 
-    std::vector<Point> solve(ProblemInstance pInst);
+    std::vector<Point> solve(ProblemInstance &pInst);
 
     void treeToFile(std::string fName);
 

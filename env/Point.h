@@ -1,4 +1,5 @@
 #include<cmath>
+#include<functional>
 
 #pragma once
 
@@ -23,4 +24,19 @@ class Point{
         float distance(const Point &other){
             return sqrt(sqrDistance(other));
         }
+};
+
+template <>
+struct std::hash<Point>
+{
+  std::size_t operator()(const Point& p) const
+  {
+    using std::hash;
+
+    // Compute individual hash values for first,
+    // second and third and combine them using XOR
+    // and bit shifting:
+
+    return (std::hash<int>()(p.x) ^ (std::hash<int>()(p.y) << 1));
+  }
 };
