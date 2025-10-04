@@ -1,7 +1,8 @@
-#include "Obstacle.h"
+#include "IObstacle.h"
 #include "Point.h"
 #include<vector>
 #include<random>
+#include<memory>
 
 #pragma once
 
@@ -17,7 +18,7 @@ class Workspace{
         float y_min;
         float y_max;
 
-        std::vector<Obstacle> obstacles;
+        std::vector<std::shared_ptr<IObstacle>> obstacles;
 
         Workspace(float x_min, float x_max, float y_min, float y_max);
 
@@ -29,5 +30,7 @@ class Workspace{
 
         Point sample();
 
-        void addObstacle(const Point &p, const float r);
+        void addCircObstacle(const Point &p, const float r);
+
+        void addCvxPolyObstacle(const std::vector<Point> &vertices);
 };

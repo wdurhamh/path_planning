@@ -6,15 +6,18 @@
 
 #include<iostream>
 #include<functional>
+#include<vector>
 
 
 int main(){
     Workspace w(0, 10, 0, 10);
-    w.addObstacle(Point(3,2.5), 1);
+    w.addCircObstacle(Point(3,2.5), 1);
 
-    w.addObstacle(Point(4,8), 1);
-    w.addObstacle(Point(7,5), 1);
-    w.addObstacle(Point(9,5), 1);
+    w.addCvxPolyObstacle(std::vector<Point>{Point(5,4), Point(5, 7), Point(8, 7), Point(8,4) });
+
+    // w.addCircObstacle(Point(4,8), 1);
+    // w.addCircObstacle(Point(7,5), 1);
+    // w.addCircObstacle(Point(9,5), 1);
 
     Point start(2.0, 0.0);
     Point end(10.0, 10.0);

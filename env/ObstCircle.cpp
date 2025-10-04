@@ -1,5 +1,5 @@
 //for the sake of this practice, assume all obstacles are nice circles
-#include "Obstacle.h"
+#include "ObstCircle.h"
 #include "Point.h"
 
 #include<cmath>
@@ -9,13 +9,13 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-Obstacle::Obstacle(Point p, float r) : c(p), r(r) {}
+ObstCircle::ObstCircle(Point p, float r) : c(p), r(r) {}
 
-bool Obstacle::containsPt(const Point &p){
+bool ObstCircle::containsPt(const Point &p) const {
     return pow((c.x - p.x),2) + pow((c.y - p.y), 2) < pow(r,2);
 }
 
-bool Obstacle::intersectsSegment(const Point &p1, const Point &p2){
+bool ObstCircle::intersectsSegment(const Point &p1, const Point &p2) const {
     Point p2_reg = {p2.x - p1.x, p2.y - p1.y};
     float mag1Sq = pow(p2_reg.x, 2) + pow(p2_reg.y, 2);
     // std::cout<<mag1Sq<<std::endl;

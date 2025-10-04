@@ -1,5 +1,10 @@
+#include "IObstacle.h"
 #include "Workspace.h"
+#include "ObstCircle.h"
+#include "ObstCvxPoly.h"
+
 #include<random>
+#include<memory>
 
 Workspace::Workspace(float x_min, float x_max, float y_min, float y_max):
             x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max),
@@ -11,8 +16,8 @@ bool Workspace::inWorkspace(const Point &p) const{
 
 bool Workspace::ptInObstacle(const Point &p) const {
 
-    for (auto obstacle : obstacles){
-        if (obstacle.containsPt(p)){
+    for (auto &obstacle : obstacles){
+        if (obstacle->containsPt(p)){
             return true;
         }
     }
@@ -20,15 +25,13 @@ bool Workspace::ptInObstacle(const Point &p) const {
 }
 
 bool Workspace::segmentIntersectsObstacle(const Point &p1, const Point &p2) const {
-    for (auto obstacle: obstacles){
-        if (obstacle.intersectsSegment(p1, p2)){
+    for (auto &obstacle: obstacles){
+        if (obstacle->intersectsSegment(p1, p2)){
             return true;
         }
     }
     return false;
 }
-
-
 
 Point Workspace::sample() {
     float x = distx(gen);
@@ -36,7 +39,10 @@ Point Workspace::sample() {
     return Point(x, y);
 }
 
-void Workspace::addObstacle(const Point &p, const float r){
-    Obstacle o(p, r);
-    obstacles.push_back(o);
+void Workspace::addCircObstacle(const Point &p, const float r){
+    obstacles.push_back(std::make_shared<ObstCircle>(p, r));
+}
+
+void Workspace::addCvxPolyObstacle(const std::vector<Point> &vertices){
+    obstacles.push_back(std::make_shared<ObstCvxPoly>(vertices));
 }

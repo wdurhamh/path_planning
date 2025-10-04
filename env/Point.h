@@ -24,6 +24,15 @@ class Point{
         float distance(const Point &other){
             return sqrt(sqrDistance(other));
         }
+
+        float cross(const Point &other){
+            return x*other.y - y*other.x;
+        }
+
+        Point operator- (const Point &other)const{
+          return Point(x - other.x, y - other.y);
+        }
+
 };
 
 template <>

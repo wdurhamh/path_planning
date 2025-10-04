@@ -38,14 +38,12 @@ std::vector<Point> AStar::solve(ProblemInstance &pInst){
         if (expanded.count(node->p)){
             continue;
         }
-        std::cout<<"Expanding new node"<<std::endl;
         //marked as visited
         expanded.insert(node->p);
         for (auto neighbor : neighbors){
             double x = node->p.x + gridStep*neighbor.first;
             double y = node->p.y + gridStep*neighbor.second;
             Point p(x,y);
-            // std::cout<<"Looking at neighbor"<<x<<", "<<y<<std::endl;
             if (expanded.count(p) == 0 
                 && pInst.w.inWorkspace(p)
                 &&!pInst.w.segmentIntersectsObstacle(p, node->p)){
@@ -55,17 +53,14 @@ std::vector<Point> AStar::solve(ProblemInstance &pInst){
                 std::shared_ptr<AStarNode> child;
                 if (key != visitMap.end()){
                     //if so, check if this path is a better path
-                    std::cout<<"Found a visited boi"<<std::endl;
                     std::shared_ptr<AStarNode> possibleChild = key->second.lock();
                     if (possibleChild && (possibleChild->costToHere > node->costToHere + dist) ){
                         child = possibleChild;
-                        std::cout<<"updating visited boi"<<std::endl;
                     }   
                 }
                 else{
                     //otherwise, create new AStar node and add to queue
                     std::shared_ptr<AStarNode> newNode = std::make_shared<AStarNode>();
-                    std::cout<<"Adding new node for"<<p.x<<", "<<p.y<<std::endl;
                     newNode->p = p;
                     newNode->costToGo = heuristic(p, pInst.end);
                     child = newNode;
@@ -73,11 +68,9 @@ std::vector<Point> AStar::solve(ProblemInstance &pInst){
                 }
 
                 if (child){
-                    std::cout<<"Adding child"<<std::endl;
                     child->costToHere = node->costToHere + dist;
                     priorityQueue.push(child);//even if it's in the queue, we add again because it has a new score
                     node->addChild(child);
-                    std::cout<<"Child added"<<std::endl;
                     //finally, check if we made it to the end
                     if (p.distance(pInst.end) <= gridStep/std::sqrt(2)){
                         endNode = child;
