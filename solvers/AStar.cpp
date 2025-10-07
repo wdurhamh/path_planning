@@ -34,6 +34,7 @@ std::vector<Point> AStar::solve(ProblemInstance &pInst){
     std::shared_ptr<AStarNode> endNode;
     while (!endNode && !priorityQueue.empty()){
         std::shared_ptr<AStarNode> node = priorityQueue.top();
+
         priorityQueue.pop();
         if (expanded.count(node->p)){
             continue;
@@ -47,30 +48,34 @@ std::vector<Point> AStar::solve(ProblemInstance &pInst){
             if (expanded.count(p) == 0 
                 && pInst.w.inWorkspace(p)
                 &&!pInst.w.segmentIntersectsObstacle(p, node->p)){
-                //check if this point has been added already
+                
                 float dist = p.distance(node->p);
+                
                 auto key = visitMap.find(p);
+                //check if this point has been added already
                 std::shared_ptr<AStarNode> child;
                 if (key != visitMap.end()){
                     //if so, check if this path is a better path
                     std::shared_ptr<AStarNode> possibleChild = key->second.lock();
                     if (possibleChild && (possibleChild->costToHere > node->costToHere + dist) ){
-                        child = possibleChild;
+                        //let's make a totaly new child
+                        child = std::make_shared<AStarNode>();
+                        child->p = p;
+                        child->costToGo = possibleChild->costToGo;
                     }   
                 }
                 else{
                     //otherwise, create new AStar node and add to queue
-                    std::shared_ptr<AStarNode> newNode = std::make_shared<AStarNode>();
-                    newNode->p = p;
-                    newNode->costToGo = heuristic(p, pInst.end);
-                    child = newNode;
-                    visitMap[p] = newNode;
+                    child = std::make_shared<AStarNode>();
+                    child->p = p;
+                    child->costToGo = heuristic(p, pInst.end);
                 }
 
                 if (child){
                     child->costToHere = node->costToHere + dist;
                     priorityQueue.push(child);//even if it's in the queue, we add again because it has a new score
                     node->addChild(child);
+                    visitMap[p] = child;
                     //finally, check if we made it to the end
                     if (p.distance(pInst.end) <= gridStep/std::sqrt(2)){
                         endNode = child;

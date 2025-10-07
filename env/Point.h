@@ -13,10 +13,6 @@ class Point{
         
         Point(float x, float y): x(x), y(y){}
 
-        bool operator==(const Point &other) const {
-            return (this->x == other.x && this->y == other.y);
-        }
-
         float sqrDistance(const Point &other){
             return pow(x - other.x, 2) + pow(y - other.y, 2);
         }
@@ -29,11 +25,33 @@ class Point{
             return x*other.y - y*other.x;
         }
 
-        Point operator- (const Point &other)const{
-          return Point(x - other.x, y - other.y);
+        Point operator -= (const Point &other){
+          x -= other.x;
+          y -= other.y;
+          return *this;
+        }
+
+        Point operator += (const Point &other){
+          x += other.x;
+          y += other.y;
+          return *this;
         }
 
 };
+
+inline bool operator == (const Point &p1, const Point &p2){
+  return (p1.x==p2.x && p1.y==p2.y);
+}
+
+inline Point operator - (const Point &p1, const Point &p2){
+    Point newPoint = p1;
+    return newPoint -=p2;
+}
+
+inline Point operator - (const Point &p1){
+  return Point(-p1.x, -p1.y);
+
+}
 
 template <>
 struct std::hash<Point>
